@@ -1,0 +1,26 @@
+schema: pageviews
+name: daily_top
+title: 1 日ごとの閲覧数の上位 1,000 記事
+description: |-
+  1 日ごとに人のアクセスの閲覧数が多い 1,000 記事です。記事（標準名前空間）だけで、メインページは除きます。
+
+  - date は UTC の日付です
+primary_key: [date, rank]
+sources:
+  - path: https://dumps.wikimedia.org/other/pageview_complete/
+fields:
+  - name: date
+    title: 日付
+    description: UTC
+  - name: rank
+    title: 順位
+    description: 閲覧数が同じときは page_id の小さい順
+  - name: page_id
+    title: ページ ID
+  - name: title
+    title: 記事名
+    description: 空白は _
+  - name: views
+    title: 閲覧数
+    description: 人のアクセス
+    annotations: { queria: { semantic: { role: measure, agg: sum } } }

@@ -1,0 +1,9 @@
+# PR のビルド確認用。公開ストレージには書かず、手元の DuckDB ファイルに作る
+wikipedia:
+  target: ci
+  outputs:
+    ci:
+      type: duckdb
+      path: target/wikipedia.duckdb
+      schema: main
+      threads: 1

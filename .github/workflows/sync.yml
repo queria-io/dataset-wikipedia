@@ -1,0 +1,24 @@
+name: Sync
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "*.md"
+  # Pageview complete dumps は前日分が 03:00 UTC ごろに出る
+  schedule:
+    - cron: "0 6 * * *" # 毎日 15:00 JST
+  workflow_dispatch:
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    uses: queria-io/dataset-shared/.github/workflows/sync.yml@main
+    with:
+      dataset_name: wikipedia
+      # 1 回に最大 7 日分を取る（1 日分の取得が 3〜4 分）
+      timeout_minutes: 60
+    secrets: inherit

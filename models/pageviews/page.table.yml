@@ -1,0 +1,22 @@
+schema: pageviews
+name: page
+title: ページの一覧
+description: |-
+  日本語版 Wikipedia のページです。1 行が 1 ページで、ページ ID・名前空間・記事名を持ちます。記事名から page_id を引くのに使います。
+
+  - 記事は namespace = 0 です
+  - 転送ページは入れていません。ダンプの時点で削除されているページは入りません
+primary_key: [page_id]
+sources:
+  - path: https://dumps.wikimedia.org/jawiki/latest/
+fields:
+  - name: page_id
+    title: ページ ID
+  - name: namespace
+    title: 名前空間
+    description: 0 が記事、14 が Category、10 が Template など
+  - name: title
+    title: 記事名
+    description: 名前空間の接頭辞を除いた名前。空白は _
+  - name: dump_date
+    title: ダンプの日付
