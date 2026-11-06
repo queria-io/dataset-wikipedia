@@ -1,0 +1,61 @@
+# この dataset.yml は fdl commit が読む（FDL の dataset.json を YAML で書いたもの）。
+# 表の説明は models/ の *.table.yml に書く。表と列の型・NULL・行数は fdl commit がカタログから埋める。
+# Queria だけの項目（テーマ・カバー・列の意味）は annotations.queria に書く。
+name: wikipedia
+title: Wikipedia 日本語版のページビュー
+description: |-
+  日本語版 Wikipedia の記事ごとの閲覧数です。1 時間ごと・アクセス方法（PC・モバイル Web・アプリ）ごとに、人のアクセスと bot と判定されたアクセスを分けて収録し、毎日更新します。
+
+  出典：Wikimedia Foundation「Pageview complete dumps」（CC0）、日本語版 Wikipedia のデータベースダンプ。Queria が加工したものです。
+keywords:
+  - Wikipedia
+  - ウィキペディア
+  - ページビュー
+  - 閲覧数
+  - アクセス数
+  - アクセスログ
+  - 時系列
+  - トレンド
+  - bot
+  - Wikimedia
+homepage: https://github.com/queria-io/dataset-wikipedia
+language: ja
+
+licenses:
+  - CC0-1.0
+  - CC-BY-SA-4.0
+
+sources:
+  - title: Pageview complete dumps（Wikimedia）
+    path: https://dumps.wikimedia.org/other/pageview_complete/readme.html
+  - title: 日本語版 Wikipedia のデータベースダンプ（Wikimedia）
+    path: https://dumps.wikimedia.org/jawiki/latest/
+
+contributors:
+  - title: Wikimedia Foundation
+    path: https://wikimediafoundation.org/
+    roles: [rightsHolder]
+
+update_frequency: daily
+
+schemas:
+  - name: pageviews
+    title: ページビュー
+
+annotations:
+  queria:
+    themes: [ict_science, education_culture]
+    cover: 📖
+    ai_context:
+      instructions: |
+        日本語版 Wikipedia の記事の閲覧数。記事は page_id で引く。記事名から page_id を引くには page（namespace = 0 が記事）を使う。記事名の空白は _。
+        hourly が元の粒度（1 時間 × ページ × アクセス方法 × 人か bot か）。hour は UTC なので、日本時間で集計するときは hour AT TIME ZONE 'Asia/Tokyo' にする。
+        日ごとの推移は daily（views が人のアクセス、automated_views が bot と判定されたアクセス）、その日の人気記事は daily_top を使う。
+        hourly と daily は大きいので、必ず日付と page_id で絞る。daily の date は UTC の日付。
+        閲覧数は転送ページ経由の閲覧を転送先のページに含む。
+      synonyms: [ウィキペディアの閲覧数, Wikipedia のアクセス数, ページビュー, PV]
+      examples:
+        - ある記事の閲覧数の推移を知りたい
+        - 昨日よく読まれた記事の上位を知りたい
+        - 1 日のうち何時に読まれているかを知りたい
+        - bot のアクセスがどのくらいあるか知りたい

@@ -1,0 +1,26 @@
+name: "wikipedia"
+version: "1.0.0"
+
+profile: "wikipedia"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros", "shared/macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  wikipedia:
+    +database: wikipedia
+    pageviews:
+      +materialized: table
+      # 記事名などの文字列が多いので zstd で圧縮する（1 時間ごとの表で snappy より 3 割小さい）。
+      # 設定はスキーマに付く (dbt は __dbt_tmp に書いてから改名するので、テーブルに付けても効かない)
+      # PR のビルド確認（ci/profiles.yml、target ci）は DuckLake でないので付けない
+      +pre-hook:
+        - "{{ \"CALL wikipedia.set_option('parquet_compression', 'zstd', schema => 'pageviews')\" if target.name != 'ci' else '' }}"
