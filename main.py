@@ -63,8 +63,8 @@ def main():
     new_dump = download_page(dump)
 
     # ページの一覧が変わらないときは page を作り直さない（上位の表は公開中の page を読む）
-    select = (["path:models/pageviews/page.sql"] if new_dump else []) + (
-        ["path:models/pageviews/hourly.sql", "path:models/pageviews/daily.sql", "path:models/pageviews/daily_top.sql"]
+    select = (["path:models/pageviews/mart/page.sql"] if new_dump else []) + (
+        ["path:models/pageviews/mart/hourly.sql", "path:models/pageviews/mart/daily.sql", "path:models/pageviews/mart/daily_top.sql"]
         if days
         else []
     )
