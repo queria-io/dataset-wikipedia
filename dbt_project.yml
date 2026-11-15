@@ -19,6 +19,11 @@ models:
     +database: wikipedia
     pageviews:
       +materialized: table
+      # raw は取得したまま、stg はファイル名からの日付の取り出しと型付け。どちらも mart の SQL に展開し、テーブルは作らない
+      raw:
+        +materialized: ephemeral
+      stg:
+        +materialized: ephemeral
       # 記事名などの文字列が多いので zstd で圧縮する（1 時間ごとの表で snappy より 3 割小さい）。
       # 設定はスキーマに付く (dbt は __dbt_tmp に書いてから改名するので、テーブルに付けても効かない)
       # PR のビルド確認（ci/profiles.yml、target ci）は DuckLake でないので付けない
