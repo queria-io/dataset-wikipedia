@@ -3,11 +3,12 @@
 ページビューの行は「リクエストされた記事名」と「転送先を解決したページの page_id」を持つ。
 page_id ごとの正式な記事名と名前空間はダンプの page テーブルにしかないので、ここから取る。
 ダンプは月 2 回（1 日と 20 日）作られる。前回と同じダンプなら取り直さない。
+ダンプは取得して sha256 を記録してから読み、読み終えたら消す。
 
 INSERT 文の値は (page_id, page_namespace, 'page_title', page_is_redirect, ...) で、今のダンプは 1 行に 1 つ。
 転送ページ（page_is_redirect = 1）は入れない。
 
-出力: data/wikipedia/page/<YYYYMMDD>.tsv.gz（page_id, namespace, title）
+出力: data/wikipedia/page/<YYYYMMDD>-<元のファイルの sha256>.tsv.gz（page_id, namespace, title）
 
 データソース: Wikimedia Foundation, jawiki database dumps
 https://dumps.wikimedia.org/jawiki/latest/
@@ -19,9 +20,9 @@ import re
 from collections.abc import Iterable, Iterator
 from datetime import date, datetime
 from pathlib import Path
-from urllib.request import Request
 
-from shared.fetch import fetch, replacing, request
+from pipelines import source_file
+from shared.fetch import fetch, replacing
 
 logger = logging.getLogger("pipelines")
 
@@ -61,8 +62,8 @@ def pages(lines: Iterable[bytes]) -> Iterator[bytes]:
     )
 
 
-def extract(response, out: Path) -> int:
-    with gzip.open(response) as lines, gzip.open(out, "wb", compresslevel=1) as dest:
+def extract(dump: Path, out: Path) -> int:
+    with gzip.open(dump) as lines, gzip.open(out, "wb", compresslevel=1) as dest:
         return sum(1 for _ in map(dest.write, pages(lines)))
 
 
@@ -74,10 +75,13 @@ def download_page(current: date | None) -> date | None:
     OUT.mkdir(parents=True, exist_ok=True)
     for path in OUT.glob("*.tsv.gz"):
         path.unlink()
-    req = Request(dump_url(day), headers={"User-Agent": USER_AGENT})
-    with replacing(OUT / f"{day:%Y%m%d}.tsv.gz") as tmp:
-        rows = request(req, lambda response: extract(response, tmp), timeout=300)
+    dump, row = source_file.fetch(dump_url(day), f"https://dumps.wikimedia.org/jawiki/{day:%Y%m%d}/")
+    with replacing(OUT / f"{day:%Y%m%d}-{row['sha256']}.tsv.gz") as tmp:
+        rows = extract(dump, tmp)
         if rows < 1_000_000:
-            raise RuntimeError(f"{req.full_url} のページが {rows} 件しかない")
+            raise RuntimeError(f"{row['url']} のページが {rows} 件しかない")
+    dump.unlink()
+    source_file.forget("page-", set())
+    source_file.record(f"page-{day:%Y%m%d}", row)
     logger.info("page %s: %d 行", day, rows)
     return day

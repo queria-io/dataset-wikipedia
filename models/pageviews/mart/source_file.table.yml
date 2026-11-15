@@ -1,0 +1,29 @@
+schema: pageviews
+name: source_file
+title: 元のファイルの一覧
+description: |-
+  page・hourly を作るのに取得した Wikimedia のダンプのファイルです。1 行が 1 ファイルで、取得した URL・取得日時と、ファイルの sha256 を持ちます。
+
+  - page・hourly の source_sha256 と sha256 で結合できます
+  - ファイル本体は保存していません。url から取得できます
+primary_key: [sha256]
+sources:
+  - path: https://dumps.wikimedia.org/
+fields:
+  - name: url
+    title: ファイルの URL
+  - name: page_url
+    title: 掲載ページの URL
+  - name: sha256
+    title: ファイルの sha256
+  - name: bytes
+    title: バイト数
+  - name: media_type
+    title: メディアタイプ
+  - name: retrieved_at
+    title: 取得した日時
+    description: UTC
+  - name: etag
+    title: 取得したときの ETag
+  - name: last_modified
+    title: 取得したときの Last-Modified
