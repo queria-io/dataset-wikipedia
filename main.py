@@ -64,6 +64,8 @@ def main():
 
     # ページの一覧が変わらないときは page を作り直さない（上位の表は公開中の page を読む）
     select = (["page"] if new_dump else []) + (["hourly", "daily", "daily_top"] if days else [])
+    if select:
+        select.append("source_file")
     if not select:
         logger.info("新しい日もダンプも無いので dbt を回さない")
         return

@@ -5,6 +5,7 @@ select
     page_id,
     namespace,
     title,
-    dump_date
+    dump_date,
+    source_sha256
 from {{ ref('stg_page') }}
 order by namespace, title

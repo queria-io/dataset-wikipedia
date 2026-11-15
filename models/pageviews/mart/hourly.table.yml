@@ -28,3 +28,6 @@ fields:
   - name: views
     title: 閲覧数
     annotations: { queria: { semantic: { role: measure, agg: sum } } }
+  - name: source_sha256
+    title: 元のファイル
+    description: この行を読んだ Pageview complete dumps のファイルの sha256。source_file の sha256 で結合できる。この列を追加する前に追加した行は NULL

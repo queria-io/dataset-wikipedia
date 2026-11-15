@@ -4,10 +4,11 @@
 
 select
     strptime(regexp_extract(filename, '(\d{8})-', 1), '%Y%m%d')::date as date,
-    regexp_extract(filename, '-(user|automated)\.txt', 1) as agent_type,
+    regexp_extract(filename, '-(user|automated)-', 1) as agent_type,
     title,
     try_cast(page_id as bigint) as page_id,
     access_method,
     daily_total,
-    hourly
+    hourly,
+    source_sha256
 from {{ ref('raw_pageviews') }}
