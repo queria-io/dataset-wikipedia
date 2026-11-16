@@ -1,5 +1,6 @@
-schema: pageviews
-name: daily_top
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: pageviews.daily_top
 title: 1 日ごとの閲覧数の上位 1,000 記事
 description: |-
   1 日ごとに人のアクセスの閲覧数が多い 1,000 記事です。記事（標準名前空間）だけで、メインページは除きます。
@@ -23,4 +24,5 @@ fields:
   - name: views
     title: 閲覧数
     description: 人のアクセス
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
+---

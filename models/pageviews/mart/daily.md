@@ -1,5 +1,6 @@
-schema: pageviews
-name: daily
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: pageviews.daily
 title: 1 日ごとの閲覧数
 description: |-
   ページごとの 1 日の閲覧数です。1 行が 1 日・1 ページで、人のアクセスの合計とアクセス方法ごとの内訳、bot と判定されたアクセスの数を持ちます。
@@ -19,17 +20,18 @@ fields:
   - name: views
     title: 閲覧数
     description: 人のアクセス
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
   - name: desktop_views
     title: 閲覧数（PC）
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
   - name: mobile_web_views
     title: 閲覧数（モバイル Web）
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
   - name: mobile_app_views
     title: 閲覧数（アプリ）
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
   - name: automated_views
     title: bot の閲覧数
     description: bot と判定されたアクセス
-    annotations: { queria: { semantic: { role: measure, agg: sum } } }
+    semantic: {role: measure, agg: sum}
+---
