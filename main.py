@@ -39,7 +39,11 @@ def published_state() -> tuple[date | None, date | None]:
         "SELECT table_name FROM duckdb_tables() WHERE database_name = 'wikipedia' AND schema_name = 'pageviews'"
     ).fetchall()}
     last_day = con.execute("SELECT max(date) FROM wikipedia.pageviews.daily").fetchone()[0] if "daily" in tables else None
-    dump = con.execute("SELECT max(dump_date) FROM wikipedia.pageviews.page").fetchone()[0] if "page" in tables else None
+    # source_sha256 の無い page は、その列を足す前のビルドのもの。ダンプを取り直して作り直す
+    page_columns = {name for (name,) in con.execute(
+        "SELECT column_name FROM duckdb_columns() WHERE database_name = 'wikipedia' AND schema_name = 'pageviews' AND table_name = 'page'"
+    ).fetchall()}
+    dump = con.execute("SELECT max(dump_date) FROM wikipedia.pageviews.page").fetchone()[0] if "source_sha256" in page_columns else None
     return last_day, dump
 
 
