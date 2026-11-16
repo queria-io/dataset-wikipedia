@@ -1,5 +1,6 @@
-schema: pageviews
-name: source_file
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: pageviews.source_file
 title: 元のファイルの一覧
 description: |-
   page・hourly を作るのに取得した Wikimedia のダンプのファイルです。1 行が 1 ファイルで、取得した URL・取得日時と、ファイルの sha256 を持ちます。
@@ -27,3 +28,4 @@ fields:
     title: 取得したときの ETag
   - name: last_modified
     title: 取得したときの Last-Modified
+---

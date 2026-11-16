@@ -1,5 +1,6 @@
-schema: pageviews
-name: page
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: pageviews.page
 title: ページの一覧
 description: |-
   日本語版 Wikipedia のページです。1 行が 1 ページで、ページ ID・名前空間・記事名を持ちます。記事名から page_id を引くのに使います。
@@ -23,3 +24,4 @@ fields:
   - name: source_sha256
     title: 元のファイル
     description: このページを読んだダンプ（page.sql.gz）の sha256。source_file の sha256 で結合できる
+---
