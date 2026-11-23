@@ -1,15 +1,12 @@
----
-$schema: https://queria.io/schemas/table/v1.json
-table: pageviews.daily_top
+$schema: https://tabledoc.queria.io/schemas/table/v1.json
 title: 1 日ごとの閲覧数の上位 1,000 記事
 description: |-
   1 日ごとに人のアクセスの閲覧数が多い 1,000 記事です。記事（標準名前空間）だけで、メインページは除きます。
 
   - date は UTC の日付です
 primary_key: [date, rank]
-sources:
-  - path: https://dumps.wikimedia.org/other/pageview_complete/
-fields:
+sources: [pageview_complete]
+columns:
   - name: date
     title: 日付
     description: UTC
@@ -24,5 +21,5 @@ fields:
   - name: views
     title: 閲覧数
     description: 人のアクセス
-    semantic: {role: measure, agg: sum}
----
+metrics:
+  - {name: views, agg: sum, expr: views}
