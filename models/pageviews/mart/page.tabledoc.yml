@@ -1,6 +1,4 @@
----
-$schema: https://queria.io/schemas/table/v1.json
-table: pageviews.page
+$schema: https://tabledoc.queria.io/schemas/table/v1.json
 title: ページの一覧
 description: |-
   日本語版 Wikipedia のページです。1 行が 1 ページで、ページ ID・名前空間・記事名を持ちます。記事名から page_id を引くのに使います。
@@ -8,9 +6,8 @@ description: |-
   - 記事は namespace = 0 です
   - 転送ページは入れていません。ダンプの時点で削除されているページは入りません
 primary_key: [page_id]
-sources:
-  - path: https://dumps.wikimedia.org/jawiki/latest/
-fields:
+sources: [latest]
+columns:
   - name: page_id
     title: ページ ID
   - name: namespace
@@ -24,4 +21,3 @@ fields:
   - name: source_sha256
     title: 元のファイル
     description: このページを読んだダンプ（page.sql.gz）の sha256。source_file の sha256 で結合できる
----
