@@ -8,7 +8,7 @@ description: |-
 primary_key: [date, page_id]
 sources:
   - id: pageview_complete
-    path: https://dumps.wikimedia.org/other/pageview_complete/
+    url: https://dumps.wikimedia.org/other/pageview_complete/
 columns:
   - name: date
     title: 日付
