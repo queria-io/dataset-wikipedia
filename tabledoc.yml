@@ -5,6 +5,7 @@ description: |-
   日本語版 Wikipedia の記事ごとの閲覧数です。1 時間ごと・アクセス方法（PC・モバイル Web・アプリ）ごとに、人のアクセスと bot と判定されたアクセスを分けて収録し、毎日更新します。
 
   出典：Wikimedia Foundation「Pageview complete dumps」（CC0）、日本語版 Wikipedia のデータベースダンプ。Queria が加工したものです。
+image: cover.png
 topics:
   - Wikipedia
   - ウィキペディア
